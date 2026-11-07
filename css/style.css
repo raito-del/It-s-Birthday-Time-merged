@@ -605,3 +605,24 @@ body{
   width:40px; height:40px; border-radius:50%; border:2px solid #fff; outline:1px solid #ccc;
   cursor:pointer; margin:4px;
 }
+
+/* ==========================================================
+   বেলুন ঠিক করার CSS (আগের অংশ, এখন ফাইলের শেষে যোগ করা)
+   ========================================================== */
+.balloon{
+  position:absolute; bottom:-170px; width:74px; cursor:pointer;
+  animation: rise var(--dur, 10s) linear forwards;
+}
+.balloon .b-body{
+  width:74px; height:88px; border-radius:50% 50% 48% 48%;
+  position:relative; animation:sway 3s ease-in-out infinite alternate;
+  box-shadow: inset -8px -10px 16px rgba(0,0,0,.12), 0 10px 20px rgba(0,0,0,.12);
+}
+.balloon .b-body::before{
+  content:""; position:absolute; top:14%; left:18%; width:22%; height:24%;
+  border-radius:50%; background:rgba(255,255,255,.7);
+}
+.balloon .b-body::after{
+  content:""; position:absolute; left:50%; top:100%; width:1px; height:70px;
+  background:linear-gradient(#fff, transparent); opacity:.8;
+}
