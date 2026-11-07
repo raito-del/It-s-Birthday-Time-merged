@@ -101,26 +101,27 @@ const CONFIG = {
      খালি রাখলে এই অংশ লুকিয়ে যাবে।
   ---------------------------------------------------- */
   friendWishes: [
-    { name: "Mim", message: `Happy birthday, Mim! 🎂
+    { name: "Mim", message: `Happy birthday, picchu! 🎂
 
-একটা বছর বাড়ল, কিন্তু তোর হাসিটা আগের মতোই আছে। Honestly, তোর সাথে সময় কাটানোটা সবসময় ভালো লাগে।
+Keep smiling, keep dreaming, and keep shining. May your big dreams turn into beautiful realities.
 
-Stay happy, stay positive, আর নিজের মতো থাকিস। Love you lots!
-তোর বন্ধু 💛` },
+your kolizer mim` },
 
-    { name: "Wasika", message: `Happy birthday, Wasika! 🎉
+    { name: "Wasika", message: `Happy birthday, Taiyaba 🎉
+নতুন বছরে তোর সব স্বপ্ন পূরণ হোক। তুই যেখানেই থাকিস না কেন, তোর উপস্থিতিটা সবসময় বোঝা যায়। সব কথা সবার মনে গেঁথে যায়।
 
-নতুন বছরে তোর সব স্বপ্ন পূরণ হোক। Keep shining, তুই যেখানেই থাকিস না কেন, তোর উপস্থিতিটা বোঝা যায়।
+আর তুই যেভাবে সবসময় আমাকে সাপোর্ট করিস তার জন্য আমি অনেক blessed … এভাবেই হাসতে থাকিস, ছোটো বাচ্চার মতো।
 
-Stay blessed, stay healthy, আর এভাবেই হাসতে থাকিস।
-তোর বন্ধুরা 🌸` },
+তোর ওয়াসিকা। 🌸` },
 
-    { name: "Labbaik", message: `Happy birthday, Labbaik! 🥳
+    { name: "Labbaik", message: `Happy birthday! 🥳
 
-তোর সাথে মজা করাটা সবসময়ই আলাদা। Hope this year brings you everything you've been working for.
+Assalamualaikum, Taiyaba.
 
-Stay awesome, stay humble, আর একটু বেশি চিল করিস। Cheers!
-তোর বন্ধু 🌟` }
+🎊 Happy Birthday! 🎊
+May your birthday be full of love, laughter and blessings. Enjoy every single moment today. Hope your day is as awesome as you are 🎉✨
+
+Have a wonderful day! ✨` }
   ],
 
   /* ---------- চিঠি ("Open my letter" বোতাম) ---------- */
@@ -133,7 +134,7 @@ Honestly, তোর মতো একজন বন্ধু পাওয়াট
 Stay healthy, stay happy, আর নিজের মতো থাক। তোর প্রতিটা দিন যেন ভালো কাটে।
 
 Love,
-তোর বন্ধুরা 💛`,
+তোর বন্ধু saduuuuuuuuuuuuuuuuuuuuuuuu 💛`,
 
   /* ---------- থিম ---------- */
 
