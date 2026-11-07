@@ -1,11 +1,14 @@
 /* ==========================================================
    admin.js — অ্যাডমিন প্যানেল ও কাস্টমাইজ
    ----------------------------------------------------------
-   • উপরে ডানে "A" → প্যানেল → Customize → পেজ ট্যাব
+   • উপরে ডানে "A" → পাসওয়ার্ড → Customize → পেজ ট্যাব
    • প্রতিটা বদল সাথে সাথে পেজে দেখা যাবে
    • এই ব্রাউজারে সেভ হয়; ⬇ config.js ডাউনলোড করে GitHub এ দিলে সবার জন্য বদলাবে
-   • এই ফাইলে কিছু বদলানোর দরকার নেই
+   • পাসওয়ার্ড বদলাতে নিচের ADMIN_PASSWORD লাইনটা বদলাও
    ========================================================== */
+
+/* পাসওয়ার্ড (এখন: 394) */
+const ADMIN_PASSWORD = "394";
 
 const SAVE_KEY = "birthdaySite:config:v2";
 
@@ -18,8 +21,12 @@ function mk(tag, cls, text) {
 
 /* ---------- সেভ / লোড ---------- */
 function saveConfig() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(CONFIG)); return "ok"; }
-  catch (e) { return e && e.name === "QuotaExceededError" ? "full" : "off"; }
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(CONFIG));
+    return "ok";
+  } catch (e) {
+    return e && e.name === "QuotaExceededError" ? "full" : "off";
+  }
 }
 
 function loadSaved() {
@@ -32,6 +39,7 @@ function loadSaved() {
 }
 
 let saveTimer = null;
+
 function scheduleSave() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
@@ -79,6 +87,7 @@ function readAsDataURL(file) {
 function itemsToText(items) {
   return items.map(it => it.word ? `${it.word} | ${it.line}` : it.line).join("\n");
 }
+
 function textToItems(text) {
   return text.split("\n").filter(l => l.trim()).map(l => {
     const idx = l.indexOf("|");
@@ -115,6 +124,7 @@ function imageField(label, obj, prop) {
   }
 
   const right = mk("div", "adm-imgRight");
+
   const url = mk("input");
   url.placeholder = "ছবির লিংক বা assets/xyz.jpg";
   url.value = src && !src.startsWith("data:") ? src : "";
@@ -154,6 +164,7 @@ const TABS = [
   ["memories", "মেমোরি"], ["friends", "শুভেচ্ছা"], ["letter", "চিঠি"],
   ["music", "গান"], ["theme", "থিম"], ["export", "এক্সপোর্ট"]
 ];
+
 let curTab = "welcome";
 
 const BUILD = {
@@ -247,10 +258,12 @@ const BUILD = {
     const isData = (CONFIG.music || "").startsWith("data:");
     return [
       inputField("গানের লিংক বা ফাইল পথ (যেমন assets/birthday.mp3)", isData ? "" : CONFIG.music, v => {
-        CONFIG.music = v.trim(); App.refresh();
+        CONFIG.music = v.trim();
+        App.refresh();
       }),
-      isData ? mk("p", "adm-note", "✓ আপলোড করা গান এখন চালু আছে") : mk("p", "adm-note", ""),
-      up, file
+      mk("p", "adm-note", isData ? "✓ আপলোড করা গান এখন চালু আছে" : ""),
+      up,
+      file
     ];
   },
 
@@ -310,7 +323,7 @@ function resetAll() {
   location.reload();
 }
 
-/* ---------- প্যানেল দেখানো ---------- */
+/* ---------- প্যানেল দেখানো ও পাসওয়ার্ড ---------- */
 function currentPageId() {
   const vis = id => !$(id).classList.contains("hidden");
   if (vis("memories")) return "memories";
@@ -321,10 +334,12 @@ function currentPageId() {
   return "welcome";
 }
 
-/* পাসওয়ার্ড: এখানে বদলাও (এখন: 394) */
-const ADMIN_PASSWORD = "394";
+function openAdmin() {
+  $("adminPanel").classList.add("open");
+  showLock();
+}
 
-function openAdmin() { $("adminPanel").classList.add("open"); showLock(); }
+function closeAdmin() { $("adminPanel").classList.remove("open"); }
 
 function showLock() {
   $("admLock").classList.remove("hidden");
@@ -346,15 +361,13 @@ function tryUnlock() {
   }
 }
 
-$("admUnlock").onclick = tryUnlock;
-$("admPass").addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
-function closeAdmin() { $("adminPanel").classList.remove("open"); }
 function showHome() {
   $("admHome").classList.remove("hidden");
   $("admEditor").classList.add("hidden");
   $("admTitle").textContent = "Admin";
   setStatus("");
 }
+
 function showEditor() {
   curTab = currentPageId();
   $("admHome").classList.add("hidden");
@@ -366,11 +379,12 @@ function showEditor() {
 
 $("adminBtn").onclick = openAdmin;
 $("admClose").onclick = closeAdmin;
+$("admUnlock").onclick = tryUnlock;
+$("admPass").addEventListener("keydown", e => { if (e.key === "Enter") tryUnlock(); });
 $("admGoCustomize").onclick = showEditor;
 $("admBack").onclick = showHome;
 $("admExport").onclick = exportConfig;
 
-/* ---------- শুরু: সেভ করা কাস্টমাইজ লোড করে পেজে লাগাও ---------- */
 /* ---------- পেজ রিফ্রেশ: সব কিছু CONFIG থেকে আবার আঁকে ---------- */
 App.refresh = function () {
   App.applyTheme(CONFIG.theme);
