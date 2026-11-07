@@ -134,7 +134,7 @@ Honestly, তোর মতো একজন বন্ধু পাওয়াট
 Stay healthy, stay happy, আর নিজের মতো থাক। তোর প্রতিটা দিন যেন ভালো কাটে।
 
 Love,
-তোর বন্ধু saduuuuuuuuuuuuuuuuuuuuuuuu 💛`,
+তোর dusto saduuuuuuuuuuuuuuuuuuuuuuuu 💛`,
 
   /* ---------- থিম ---------- */
 
