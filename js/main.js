@@ -1,8 +1,8 @@
 /* ==========================================================
    main.js — বেলুন, মোমবাতি, উইশ স্টিকার, কার্ড ও থিম
    ----------------------------------------------------------
-   এই ফাইলে সাধারণত কিছু বদলানোর দরকার নেই।
-   লেখা/ছবি বদলাতে → config.js বা অ্যাডমিন প্যানেল
+   বেলুন: টানা আসবে, আলাদা আলাদা লেনে, দ্রুত গতিতে।
+   পপ শব্দ: কোডের ভেতরে তৈরি (কোনো বাইরের ফাইল লাগে না)।
    ========================================================== */
 
 const COLORS = ["#ff8fb1", "#ffd166", "#06d6a0", "#118ab2", "#c77dff", "#ff9f1c", "#4cc9f0", "#f72585"];
@@ -85,42 +85,106 @@ function popBurst(x, y) {
   }
 }
 
+/* ---------- পপ শব্দ (কোডের ভেতরেই তৈরি) ---------- */
+let audioCtx = null;
+
+function playPop() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+
+    // "ফট" অংশ: নিচে নামা একটা সুর
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(620, t);
+    o.frequency.exponentialRampToValueAtTime(110, t + 0.12);
+    g.gain.setValueAtTime(0.45, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start(t);
+    o.stop(t + 0.17);
+
+    // "টট" অংশ: ছোট একটা নয়েজ ঝলক
+    const len = Math.floor(audioCtx.sampleRate * 0.04);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = audioCtx.createBufferSource();
+    const f = audioCtx.createBiquadFilter();
+    const g2 = audioCtx.createGain();
+    src.buffer = buf;
+    f.type = "highpass";
+    f.frequency.value = 1200;
+    g2.gain.value = 0.35;
+    src.connect(f);
+    f.connect(g2);
+    g2.connect(audioCtx.destination);
+    src.start(t + 0.01);
+  } catch (e) {}
+}
+
 /* ---------- বেলুন ---------- */
 let balloonTimer = null;
-let spawnedCount = 0;
+let laneBag = [];
+const LANES = 8;
+
+// লেন একটা একটা করে ঘুরবে, যাতে বেলুনগুলো একজায়গায় জড়ো না হয়
+function nextLane() {
+  if (!laneBag.length) {
+    laneBag = [];
+    for (let i = 0; i < LANES; i++) laneBag.push(i);
+    for (let i = laneBag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [laneBag[i], laneBag[j]] = [laneBag[j], laneBag[i]];
+    }
+  }
+  return laneBag.pop();
+}
+
+function canSpawn() {
+  return !$("intro").classList.contains("hidden") && $("candleWrap").classList.contains("hidden");
+}
 
 function startBalloons() {
-  const layer = $("intro");
-  layer.classList.remove("hidden");
+  $("intro").classList.remove("hidden");
+  $("candleWrap").classList.add("hidden");
   popped = 0;
-  spawnedCount = 0;
   updateCounter();
   spawnBalloon();
-  balloonTimer = setInterval(() => {
-    if (!$("intro").classList.contains("hidden") && !$("candleWrap").classList.contains("hidden")) {
-      clearInterval(balloonTimer);
-      return;
-    }
+  scheduleNextSpawn();
+}
+
+function scheduleNextSpawn() {
+  clearTimeout(balloonTimer);
+  if (!canSpawn()) return;
+  balloonTimer = setTimeout(() => {
     spawnBalloon();
-  }, 900);
+    scheduleNextSpawn();
+  }, 550 + Math.random() * 450);
 }
 
 function spawnBalloon() {
-  if ($("intro").classList.contains("hidden")) return;
-  if (spawnedCount >= CONFIG.balloonsNeeded + 10) return;
-  spawnedCount++;
+  if (!canSpawn()) return;
+  // একসাথে খুব বেশি বেলুন স্ক্রিনে থাকবে না
+  if ($("intro").querySelectorAll(".balloon").length >= 22) return;
+
+  const lane = nextLane();
+  const left = 4 + lane * 11.5 + (Math.random() * 4 - 2);
 
   const b = document.createElement("div");
   b.className = "balloon";
-  b.style.left = (5 + Math.random() * 85) + "%";
-  b.style.setProperty("--dur", (7 + Math.random() * 5) + "s");
+  b.style.left = left + "%";
+  // গতি: 4.5 থেকে 7 সেকেন্ডে স্ক্রিন পার হবে
+  b.style.setProperty("--dur", (4.5 + Math.random() * 2.5) + "s");
 
   const col = COLORS[Math.floor(Math.random() * COLORS.length)];
   b.innerHTML = '<div class="b-body" style="background:' + col + '"></div>';
 
   b.addEventListener("click", () => popBalloonAt(b));
+  b.addEventListener("animationend", () => b.remove());
   $("intro").appendChild(b);
-  setTimeout(() => { if (b.parentNode) b.remove(); }, 12000);
 }
 
 function popBalloonAt(b) {
@@ -129,6 +193,7 @@ function popBalloonAt(b) {
 
   const r = b.getBoundingClientRect();
   popBurst(r.left + r.width / 2, r.top + r.height / 2);
+  playPop();
 
   popped++;
   updateCounter();
@@ -142,13 +207,19 @@ function popBalloonAt(b) {
   setTimeout(() => b.remove(), 300);
 
   if (popped >= CONFIG.balloonsNeeded) {
+    clearTimeout(balloonTimer);
     setTimeout(() => showCandle(), 500);
   }
 }
 
+// ট্যাব অন্য কাজে ব্যস্ত থাকার পর ফিরে এলে বেলুন আবার চালু হবে
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && canSpawn()) scheduleNextSpawn();
+});
+
 /* ---------- মোমবাতি ---------- */
 function showCandle() {
-  clearInterval(balloonTimer);
+  clearTimeout(balloonTimer);
   $("candleWrap").classList.remove("hidden");
   $("flame").onclick = blowCandle;
 }
@@ -195,7 +266,7 @@ $("celebrate").onclick = () => {
   burstConfetti(true);
 };
 
-/* ---------- থিম বাটন (Customize প্যানেলের জন্য) ---------- */
+/* ---------- অন্যান্য ফাংশন বাইরে থেকে ডাকার জন্য ---------- */
 window.App = {
   applyTheme,
   renderCard,
