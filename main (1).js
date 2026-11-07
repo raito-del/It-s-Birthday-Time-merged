@@ -1,0 +1,604 @@
+/* ==========================================================
+   style.css — লেআউট, ফন্ট, অ্যানিমেশন
+   ----------------------------------------------------------
+   রঙ এখানে সরাসরি লেখা না; সেগুলো themes.css থেকে আসে (var(--c1) ইত্যাদি)।
+   ফন্ট বদলাতে: font-family লাইনে নাম বদলাও (index.html এ Google Font লিংকও বদলাতে হবে)।
+   ========================================================== */
+
+@property --angle { syntax:"<angle>"; initial-value:0deg; inherits:false; }
+
+/* ---------- মূল ---------- */
+*{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; }
+body{
+  font-family:'Fredoka', system-ui, sans-serif;               /* মূল ফন্ট */
+  color:var(--text);
+  background:linear-gradient(160deg, var(--bgA), var(--bgB)); /* পেছনের গ্রেডিয়েন্ট */
+  min-height:100vh; overflow:hidden;
+  transition:background .6s;
+}
+.hidden{ display:none !important; }
+
+/* ---------- পেছনের আলো ও তারা ---------- */
+.aurora{
+  position:fixed; inset:-20%; z-index:0; filter:blur(60px); opacity:.75;
+  background:
+    radial-gradient(circle at 20% 30%, var(--c2) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, var(--c3) 0%, transparent 42%),
+    radial-gradient(circle at 60% 80%, var(--c4) 0%, transparent 40%),
+    radial-gradient(circle at 30% 85%, var(--c1) 0%, transparent 38%);
+  animation:drift 16s ease-in-out infinite alternate;   /* আলো নড়ার গতি */
+}
+@keyframes drift{
+  0%  {transform:translate(0,0) rotate(0)}
+  50% {transform:translate(4%,-3%) rotate(20deg) scale(1.08)}
+  100%{transform:translate(-3%,4%) rotate(-15deg)}
+}
+.stars{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.stars i{
+  position:absolute; width:3px; height:3px; border-radius:50%;
+  background:#fff; box-shadow:0 0 8px 2px rgba(255,255,255,.8);
+  animation:twinkle ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.15; transform:scale(.6)}
+  50%    {opacity:1;   transform:scale(1.2)}
+}
+
+/* ---------- বেলুন ---------- */
+#intro{ position:fixed; inset:0; z-index:5; overflow:hidden; }
+.balloon{
+  position:absolute; bottom:-170px; width:74px; cursor:pointer;
+  animation:rise linear forwards;               /* উঠার গতি JS থেকে আসে */
+  transition:transform .2s;
+}
+.balloon:hover{ transform:scale(1.1); }
+.balloon .sway{ animation:sway 3s ease-in-out infinite alternate; }  /* দুলুনি */
+.balloon .string{
+  position:absolute; left:50%; top:100%; width:1px; height:70px;
+  background:linear-gradient(#fff, transparent); opacity:.7;
+}
+@keyframes rise{ to{ transform:translateY(calc(-100vh - 240px)); } }
+@keyframes sway{ from{transform:rotate(-4deg)} to{transform:rotate(4deg)} }
+
+/* ফাটার অ্যানিমেশন */
+.pop{ animation:poof .28s forwards !important; }
+@keyframes poof{ to{ transform:scale(1.6); opacity:0; } }
+.shard{
+  position:fixed; pointer-events:none; z-index:9; font-size:18px;
+  animation:boom 1s ease-out forwards;
+}
+@keyframes boom{
+  to{ transform:translate(var(--x), var(--y)) rotate(360deg) scale(.2); opacity:0; }
+}
+
+/* কাউন্টার (উপরের পিল) */
+#counter{
+  position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:6;
+  padding:8px 20px; border-radius:999px;
+  background:rgba(255,255,255,.85); color:var(--text); font-weight:700;
+  box-shadow:0 8px 22px rgba(0,0,0,.18); white-space:nowrap;
+}
+#counter b{ color:var(--c1); font-size:1.15rem; }
+
+/* ইচ্ছার বাবল (উপরে ভাসে) */
+.wishBubble{
+  position:fixed; left:50%; top:86px; transform:translateX(-50%); z-index:12;
+  padding:12px 22px; border-radius:20px; max-width:88vw; text-align:center;
+  background:rgba(255,255,255,.95); color:#222;
+  box-shadow:0 14px 36px rgba(0,0,0,.25); pointer-events:none;
+  animation:wishIn .5s cubic-bezier(.3,1.5,.6,1) forwards;
+}
+.wishBubble .kw{
+  font-family:'Caveat', cursive; font-size:1.9rem; font-weight:700;
+  line-height:1; color:var(--c1);
+}
+.wishBubble .ln{
+  font-family:'Playfair Display', Georgia, serif; font-style:italic;
+  font-weight:700; font-size:1.02rem; margin-top:4px;
+}
+@keyframes wishIn{
+  from{opacity:0; transform:translate(-50%,-20px) scale(.7)}
+  to  {opacity:1; transform:translate(-50%,0) scale(1)}
+}
+.wishBubble.out{ animation:wishOut .5s ease forwards; }
+@keyframes wishOut{ to{ opacity:0; transform:translate(-50%,-30px); } }
+
+/* ---------- মোমবাতি ---------- */
+#candleWrap{
+  position:absolute; left:50%; top:55%; transform:translate(-50%,-50%);
+  text-align:center; z-index:7; animation:pop .7s ease;
+}
+#candleWrap p{
+  font-family:'Caveat', cursive; font-size:2.2rem; margin:0 0 10px;
+  color:#fff; text-shadow:0 0 16px var(--c1);
+}
+.candle{
+  width:36px; height:120px; margin:0 auto; position:relative;
+  border-radius:6px 6px 4px 4px;
+  background:repeating-linear-gradient(135deg,#fff7ed 0 8px,#fde68a 8px 16px);
+  box-shadow:inset -6px 0 0 rgba(0,0,0,.1), 0 10px 24px rgba(0,0,0,.2);
+}
+.wick{
+  position:absolute; top:-10px; left:50%; width:2px; height:10px;
+  margin-left:-1px; background:#222;
+}
+.flame{
+  position:absolute; top:-52px; left:50%; width:26px; height:42px; margin-left:-13px;
+  cursor:pointer; border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;
+  background:radial-gradient(ellipse at 50% 75%, #fff 0, #fef08a 25%, #fb923c 60%, #ef4444 100%);
+  box-shadow:0 0 22px 8px rgba(251,146,60,.7);
+  animation:flick .5s infinite alternate ease-in-out;
+  transition:opacity .4s, transform .4s;
+}
+.flame:hover{ transform:scale(1.15); }
+.flame.out{ opacity:0; transform:scale(.2) translateY(-20px); }
+@keyframes flick{
+  from{transform:scale(1,1) skewX(-3deg)}
+  to  {transform:scale(.92,1.08) skewX(3deg)}
+}
+.hint2{ font-size:.95rem; margin-top:12px; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.3); }
+@keyframes pop{
+  from{opacity:0; transform:translate(-50%,-50%) scale(.7)}
+  to  {opacity:1; transform:translate(-50%,-50%) scale(1)}
+}
+
+/* ---------- ইচ্ছার স্টিকার পাতা ---------- */
+#reel{
+  position:fixed; inset:0; z-index:4; overflow:auto;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  animation:fadeIn .6s ease;
+}
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+.reelInner{ max-width:600px; width:100%; text-align:center; }
+.reelInner h2{
+  font-family:'Playfair Display', serif; font-style:italic; font-weight:900;
+  font-size:clamp(1.8rem,6vw,2.4rem); margin:0 0 6px; color:#fff;
+  text-shadow:0 2px 14px rgba(0,0,0,.25);
+}
+.reelInner .sub{ color:#fff; opacity:.9; margin:0 0 20px; }
+.stickers{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+.sticker{
+  background:#fff; color:#222; border-radius:16px; padding:10px 14px;
+  font-size:.92rem; max-width:250px; text-align:left;
+  box-shadow:0 10px 24px rgba(0,0,0,.2);
+  transform:rotate(var(--r)) scale(0);
+  animation:stick .6s cubic-bezier(.3,1.6,.6,1) forwards;
+}
+.sticker .kw{
+  font-family:'Caveat', cursive; font-size:1.4rem; font-weight:700;
+  color:var(--c1); line-height:1;
+}
+@keyframes stick{ to{ transform:rotate(var(--r)) scale(1); } }
+.reelBtn{ margin-top:26px; }
+
+/* ---------- বার্থডে কার্ড ---------- */
+#card{
+  position:fixed; inset:0; overflow:auto; z-index:2;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  animation:fadeIn .9s ease;
+}
+.wrap{
+  position:relative; max-width:520px; width:100%; border-radius:30px; padding:2px;
+  background:conic-gradient(from var(--angle), var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+  animation:spin 6s linear infinite;             /* ঘূর্ণায়মান বর্ডার */
+  box-shadow:0 0 50px var(--glow);
+}
+@keyframes spin{ to{ --angle:360deg; } }
+.panel{
+  position:relative; border-radius:28px; padding:34px 26px; text-align:center;
+  background:var(--card);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+}
+.kicker{ font-family:'Caveat', cursive; font-size:1.7rem; margin:0; color:var(--c1); }
+.title{
+  font-family:'Playfair Display', Georgia, serif; font-style:italic; font-weight:900;
+  font-size:clamp(2.2rem,8vw,3.2rem); margin:4px 0 18px; line-height:1.05;
+  background:linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+  background-size:250% auto;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:shine 4s linear infinite;
+}
+@keyframes shine{ to{ background-position:250% center; } }
+
+/* পোলারয়েড ছবি */
+.polaroid{
+  width:100%; max-width:300px; margin:0 auto; background:#fff;
+  padding:12px 12px 46px; border-radius:6px;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  transform:rotate(-3deg);
+  transition:transform .5s cubic-bezier(.3,1.4,.6,1);
+}
+.polaroid:hover{ transform:rotate(0) scale(1.03); }
+.photo{
+  width:100%; aspect-ratio:1/1; border-radius:3px; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; font-size:72px;
+  background:conic-gradient(from 45deg, var(--c2), var(--c3), var(--c4), var(--c1), var(--c2));
+}
+.photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* নিচের লেখা (অক্ষর একটা একটা করে ভাসে) */
+.bottom{
+  font-family:'Playfair Display', Georgia, serif; font-weight:900;
+  font-size:clamp(1.2rem,4.4vw,1.6rem); line-height:1.35;
+  margin:26px 0 24px; min-height:4em;
+}
+.bottom span{
+  display:inline-block; opacity:0; transform:translateY(12px) rotate(4deg);
+  animation:letter .6s cubic-bezier(.3,1.4,.6,1) forwards;
+}
+@keyframes letter{ to{ opacity:1; transform:none; } }
+
+/* বাটন */
+.btn{
+  position:relative; overflow:hidden; font-family:inherit; font-weight:700;
+  font-size:1.15rem; border:0; border-radius:999px; padding:14px 38px; cursor:pointer; color:#fff;
+  background:linear-gradient(120deg, var(--c1), var(--c3), var(--c1));
+  background-size:200% auto;
+  box-shadow:0 10px 26px var(--glow);
+  transition:transform .2s, background-position .6s;
+}
+.btn:hover{ transform:translateY(-2px) scale(1.05); background-position:right center; }
+
+.cheer{
+  font-family:'Caveat', cursive; font-size:clamp(2rem,8vw,2.8rem); font-weight:700;
+  margin:18px 0 0;
+  background:linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:pop2 .7s cubic-bezier(.3,1.5,.6,1);
+}
+@keyframes pop2{ from{opacity:0; transform:scale(.4) rotate(-6deg)} to{opacity:1; transform:none} }
+
+/* ---------- কনফেটি ---------- */
+.deco{ position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.piece{ position:absolute; top:-30px; animation:fall linear forwards; }
+@keyframes fall{ to{ transform:translate(var(--drift), 110vh) rotate(900deg); } }
+
+/* ---------- "Made by" ক্রেডিট ---------- */
+.madeBy{
+  position:fixed; right:14px; bottom:12px; z-index:21;
+  font-family:'Caveat', cursive; font-size:1.1rem; font-weight:700;
+  padding:4px 12px; border-radius:999px;
+  background:rgba(255,255,255,.7); color:var(--text);
+  box-shadow:0 4px 14px rgba(0,0,0,.12);
+  pointer-events:none; user-select:none;
+}
+
+/* ---------- Customize প্যানেল ---------- */
+#toggleEdit{
+  position:fixed; left:16px; bottom:16px; z-index:20;
+  background:linear-gradient(120deg, var(--c1), var(--c3)); color:#fff;
+  border:0; border-radius:999px; padding:10px 16px; font-weight:700; font-family:inherit;
+  cursor:pointer; box-shadow:0 8px 20px var(--glow);
+}
+#editor{
+  position:fixed; left:0; right:0; bottom:0; z-index:19;
+  max-height:70vh; overflow:auto; padding:20px;
+  background:#fff; color:#222; border-radius:22px 22px 0 0;
+  box-shadow:0 -10px 40px rgba(0,0,0,.2);
+  transform:translateY(105%); transition:transform .4s;
+  font-family:system-ui, sans-serif;
+}
+#editor.open{ transform:none; }
+#editor h3{ margin:0 0 10px; font-family:'Playfair Display', serif; }
+#editor label{ display:block; font-size:.85rem; font-weight:700; margin:10px 0 4px; }
+#editor input, #editor textarea{
+  width:100%; padding:9px 11px; border:1px solid #ddd; border-radius:10px;
+  font:inherit; font-size:.95rem;
+}
+#editor textarea{ min-height:60px; resize:vertical; }
+.themes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+.themes button{
+  width:34px; height:34px; border-radius:50%; cursor:pointer;
+  border:2px solid #fff; outline:1px solid #ccc;
+}
+/* ==========================================================
+   নতুন পেজ: স্বাগত, মেমোরি (3D), ফ্লিপ শুভেচ্ছা, লাইটবক্স, চিঠি
+   ========================================================== */
+
+/* ---------- ১ম পেজ: স্বাগত ---------- */
+#welcome{
+  position:fixed; inset:0; z-index:30; display:flex; align-items:center; justify-content:center;
+  padding:24px; text-align:center; transition:opacity .7s, transform .7s;
+}
+#welcome.leaving{ opacity:0; transform:scale(1.06); pointer-events:none; }
+.welcomeInner{ max-width:520px; width:100%; }
+.photoRing{
+  width:230px; height:230px; margin:0 auto 22px; border-radius:50%; padding:6px;
+  background:conic-gradient(from var(--angle), var(--c1), var(--c2), var(--c3), var(--c4), var(--c1));
+  animation:spin 5s linear infinite; box-shadow:0 0 50px var(--glow);
+}
+.welcomePhoto{
+  width:100%; height:100%; border-radius:50%; overflow:hidden; background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:80px;
+}
+.welcomePhoto img{ width:100%; height:100%; object-fit:cover; display:block; }
+.welcomeLine{
+  font-family:'Caveat', cursive; font-size:clamp(2rem,7vw,2.6rem); margin:0; color:var(--text);
+}
+.welcomeLine span{
+  display:inline-block; opacity:0; transform:translateY(10px);
+  animation:letter .5s cubic-bezier(.3,1.4,.6,1) forwards;
+}
+.welcomeNick{ font-family:'Caveat', cursive; font-size:clamp(1.5rem,5vw,1.9rem); margin:-6px 0 12px; color:var(--text); font-weight:700; }
+.welcomeName{
+  font-family:'Playfair Display', serif; font-style:italic; font-weight:900;
+  font-size:clamp(2.4rem,9vw,3.6rem); margin:4px 0 10px; color:var(--c1);
+  animation:pop2 .8s .4s both;
+}
+.welcomeText{
+  font-size:1.05rem; line-height:1.6; max-width:420px; margin:0 auto 26px;
+  opacity:0; animation:fadeIn 1s 1s forwards;
+}
+.welcomeBtns{ display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap; }
+.musicBtn{
+  border:0; border-radius:999px; padding:12px 18px; cursor:pointer;
+  background:#fff; color:var(--text); font-weight:700; font-family:inherit;
+  box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+.musicStatus{ font-size:.85rem; opacity:.8; min-height:1.2em; }
+
+/* ---------- ৩য় পেজ: মেমোরি ---------- */
+#memories{
+  position:fixed; inset:0; z-index:8; overflow-y:auto;
+  padding:30px 20px 80px; animation:fadeIn .8s ease;
+}
+.memInner{ max-width:900px; margin:0 auto; text-align:center; }
+.memTitle{
+  font-family:'Playfair Display', serif; font-style:italic; font-weight:900;
+  font-size:clamp(2rem,7vw,2.8rem); margin:0 0 4px; color:var(--text);
+}
+.memTitle.small{ font-size:clamp(1.5rem,5vw,2rem); }
+.memInner .sub{ opacity:.8; margin:0 0 10px; }
+
+/* 3D ঘূর্ণায়মান ছবি */
+.scene3d{ height:320px; perspective:1000px; position:relative; }
+.carousel3d{
+  position:absolute; left:50%; top:50%; width:0; height:0; transform-style:preserve-3d;
+  animation:orbit 36s linear infinite;
+}
+.scene3d:hover .carousel3d{ animation-play-state:paused; }
+@keyframes orbit{ from{transform:rotateY(0deg)} to{transform:rotateY(360deg)} }
+.c3d{
+  position:absolute; width:140px; height:180px; left:-70px; top:-90px; border-radius:16px;
+  overflow:hidden; cursor:pointer; background:linear-gradient(135deg, var(--c1), var(--c3));
+  box-shadow:0 12px 26px rgba(0,0,0,.2); transform:rotateY(var(--a)) translateZ(var(--r));
+  backface-visibility:hidden; transition:filter .3s;
+}
+.c3d:hover{ filter:brightness(1.12); }
+.c3d img{ width:100%; height:100%; object-fit:cover; display:block; }
+.c3d .num{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:2.2rem; font-weight:700;
+}
+
+.finalLine{
+  font-family:'Caveat', cursive; font-size:clamp(2rem,7vw,3rem);
+  margin:20px 0 4px; color:var(--text); min-height:1.3em;
+}
+.glow{ animation:glowPulse 2.5s ease-in-out infinite; }
+@keyframes glowPulse{
+  0%,100%{ text-shadow:0 0 6px var(--glow) }
+  50%    { text-shadow:0 0 20px var(--glow) }
+}
+
+/* ---------- বন্ধুদের শুভেচ্ছা: 3D ফ্লিপ কার্ড ---------- */
+.wishSection{ margin-top:26px; }
+.flipGrid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+  gap:16px; padding:10px;
+}
+.flip{
+  height:150px; perspective:900px; cursor:pointer; opacity:0;
+  transform:translateY(20px) rotateX(-10deg);
+  animation:flipIn .7s ease forwards;
+}
+@keyframes flipIn{ to{ opacity:1; transform:none; } }
+.flipIn{
+  position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transition:transform .7s cubic-bezier(.3,1.2,.5,1);
+}
+.flip.flipped .flipIn{ transform:rotateY(180deg); }
+.face{
+  position:absolute; inset:0; border-radius:18px; backface-visibility:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:14px; box-shadow:0 10px 24px rgba(0,0,0,.14);
+}
+.front{ background:linear-gradient(135deg, var(--c1), var(--c3)); color:#fff; }
+.back{
+  background:var(--card); color:var(--text); transform:rotateY(180deg);
+  font-size:.98rem; line-height:1.5; text-align:center;
+}
+.av{
+  width:44px; height:44px; border-radius:50%; background:#fff; color:var(--c1);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:1.3rem; margin-bottom:6px;
+}
+.front b{ font-size:1.2rem; }
+.front small{ opacity:.85; margin-top:4px; }
+
+.row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:28px 0 10px; }
+
+/* ---------- লাইটবক্স ---------- */
+#lightbox{
+  position:fixed; inset:0; z-index:50; display:none; flex-direction:column;
+  align-items:center; justify-content:center; padding:20px; background:rgba(30,20,50,.88);
+}
+#lightbox.open{ display:flex; animation:fadeIn .4s ease; }
+.lbFrame{
+  position:relative; width:min(88vw,460px); height:min(66vh,560px); border-radius:18px;
+  overflow:hidden; background:linear-gradient(135deg, var(--c1), var(--c3));
+}
+.lbFrame img{ width:100%; height:100%; object-fit:contain; display:block; }
+#lbCaption{
+  color:#fff; margin-top:14px; max-width:460px; text-align:center;
+  font-size:1.05rem; min-height:3em;
+}
+.lbNav{
+  position:absolute; top:50%; transform:translateY(-50%); border:0; border-radius:50%;
+  width:44px; height:44px; font-size:20px; cursor:pointer; background:#fff9;
+}
+#lbPrev{ left:8px; }
+#lbNext{ right:8px; }
+#lbClose{
+  position:absolute; top:14px; right:14px; border:0; border-radius:50%;
+  width:40px; height:40px; font-size:18px; cursor:pointer; background:#fff; z-index:2;
+}
+
+/* ---------- চিঠি ---------- */
+#letterModal{
+  position:fixed; inset:0; z-index:55; display:none; align-items:center;
+  justify-content:center; padding:20px; background:rgba(30,20,50,.6);
+}
+#letterModal.open{ display:flex; animation:fadeIn .4s ease; }
+.letter{
+  background:#fffaf0; color:#3b2a1a; max-width:520px; width:100%; max-height:80vh;
+  overflow-y:auto; padding:28px; border-radius:18px; white-space:pre-line; line-height:1.7;
+  box-shadow:0 20px 50px rgba(0,0,0,.3); font-family:'Playfair Display', Georgia, serif;
+}
+
+/* ==========================================================
+   ট্রান্সপারেন্ট (গ্লাস) স্টাইল + Friends' Wishes শিট
+   ========================================================== */
+.panel{
+  background:rgba(255,255,255,.2) !important;
+  border:1px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(16px) saturate(150%);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+}
+.sticker{
+  background:rgba(255,255,255,.18); color:#fff;
+  border:1px solid rgba(255,255,255,.4);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+}
+.letter{
+  background:rgba(255,250,240,.3) !important; color:#fff;
+  backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%);
+  border:1px solid rgba(255,255,255,.4);
+  text-shadow:0 1px 6px rgba(0,0,0,.35);
+}
+.btn{ background-color:transparent; }
+.btn::before{ content:""; }
+.btn{
+  background:linear-gradient(120deg, color-mix(in srgb, var(--c1) 70%, transparent), color-mix(in srgb, var(--c3) 70%, transparent));
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.4);
+}
+.c3d{ background:color-mix(in srgb, var(--c1) 45%, transparent); backdrop-filter:blur(6px); }
+.welcomePhoto{ background:rgba(255,255,255,.25); backdrop-filter:blur(8px); }
+.musicBtn{ background:rgba(255,255,255,.25); backdrop-filter:blur(10px); color:#fff; border:1px solid rgba(255,255,255,.4); }
+
+/* শিট (নিচ থেকে উপরে উঠবে) */
+#wishSheet{
+  position:fixed; inset:0; z-index:60; display:none; align-items:flex-end; justify-content:center;
+  background:rgba(20,10,40,.15);
+}
+#wishSheet.open{ display:flex; animation:fadeIn .3s ease; }
+#wishSheet.open .sheet{ animation:sheetUp .55s cubic-bezier(.2,.9,.3,1); }
+@keyframes sheetUp{ from{ transform:translateY(100%); } to{ transform:none; } }
+.sheet{
+  width:100%; max-width:900px; max-height:82vh; overflow-y:auto; padding:22px 22px 30px;
+  border-radius:26px 26px 0 0; text-align:center;
+  background:rgba(255,255,255,.2); color:#fff;
+  backdrop-filter:blur(22px) saturate(150%); -webkit-backdrop-filter:blur(22px) saturate(150%);
+  border:1px solid rgba(255,255,255,.4); border-bottom:0;
+  box-shadow:0 -10px 40px rgba(0,0,0,.2);
+  text-shadow:0 1px 6px rgba(0,0,0,.3);
+}
+.sheetHead{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.sheetHead .memTitle{ color:#fff; }
+.closeBtn{
+  border:0; border-radius:50%; width:40px; height:40px; cursor:pointer; font-size:18px;
+  background:rgba(255,255,255,.3); color:#fff;
+}
+.sheet .sub{ color:#fff; opacity:.9; }
+.face{ backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+.front{ background:color-mix(in srgb, var(--c1) 55%, transparent) !important; color:#fff; }
+.back{ background:rgba(255,255,255,.22) !important; color:#fff; }
+
+/* ==========================================================
+   বন্ধুর চিঠি (পূর্ণ স্ক্রিন, ট্রান্সপারেন্ট)
+   ========================================================== */
+.flip{ position:relative; }
+.flip .face.front{ position:absolute; inset:0; }
+#friendLetter{
+  position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center;
+  padding:20px; background:rgba(20,10,40,.2); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+#friendLetter.open{ display:flex; animation:fadeIn .4s ease; }
+.flBox{
+  position:relative; width:min(92vw,720px); max-height:86vh; overflow-y:auto;
+  padding:44px 30px 36px; border-radius:26px; text-align:center; color:#fff;
+  background:rgba(255,255,255,.2);
+  backdrop-filter:blur(22px) saturate(150%); -webkit-backdrop-filter:blur(22px) saturate(150%);
+  border:1px solid rgba(255,255,255,.45); text-shadow:0 2px 10px rgba(0,0,0,.3);
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popIn .5s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes popIn{ from{ opacity:0; transform:scale(.9) translateY(14px); } to{ opacity:1; transform:none; } }
+.flClose{ position:absolute; top:12px; right:12px; }
+.flTo{ font-family:'Caveat', cursive; font-size:clamp(2rem,6vw,2.8rem); margin:0 0 12px; }
+.flMsg{
+  font-family:'Playfair Display', Georgia, serif; font-style:italic;
+  font-size:clamp(1.2rem,4vw,1.6rem); line-height:1.7; white-space:pre-line; margin:0;
+}
+
+/* ==========================================================
+   অ্যাডমিন বাটন ও প্যানেল
+   ========================================================== */
+#adminBtn{
+  position:fixed; top:14px; right:14px; z-index:95; width:44px; height:44px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.55); cursor:pointer; font-weight:700; font-size:18px; color:#fff;
+  background:linear-gradient(120deg, var(--c1), var(--c3)); box-shadow:0 6px 18px var(--glow);
+  font-family:inherit;
+}
+#adminPanel{
+  position:fixed; top:0; right:0; bottom:0; width:min(420px,100vw); z-index:96; padding:18px;
+  overflow-y:auto; color:#222; background:rgba(255,255,255,.9);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:-10px 0 40px rgba(0,0,0,.2); transform:translateX(105%); transition:transform .4s;
+  font-family:system-ui, sans-serif;
+}
+#adminPanel.open{ transform:none; }
+.admTop{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.admTop h3{ margin:0; font-family:'Playfair Display', serif; font-size:1.4rem; }
+#adminPanel .adm-big{
+  display:block; width:100%; margin:10px 0; padding:14px; border:0; border-radius:14px;
+  font-weight:700; font-size:1rem; cursor:pointer; color:#fff; font-family:inherit;
+  background:linear-gradient(120deg, var(--c1), var(--c3));
+}
+#adminPanel .adm-big.ghost{ background:#eee; color:#333; }
+#adminPanel .adm-note{ font-size:.85rem; opacity:.8; line-height:1.5; margin:8px 0; min-height:0; }
+#adminPanel #admStatus{ color:#0a7a4b; font-weight:700; margin:4px 0; }
+.adm-btn{
+  padding:8px 12px; border:0; border-radius:10px; cursor:pointer; font-weight:700;
+  color:#fff; background:var(--c1); font-size:.9rem; font-family:inherit;
+}
+.adm-btn.ghost{ background:#e5e5e5; color:#333; }
+.admTabs{ display:flex; flex-wrap:wrap; gap:6px; margin:12px 0; }
+.admTabs button{
+  padding:6px 11px; border-radius:999px; border:1px solid #ccc; background:#fff;
+  cursor:pointer; font-size:.85rem; font-family:inherit;
+}
+.admTabs button.on{ background:var(--c1); color:#fff; border-color:var(--c1); }
+.adm-field{ margin:10px 0; }
+.adm-field > label{ display:block; font-size:.85rem; font-weight:700; margin-bottom:4px; }
+.adm-field input, .adm-field textarea{
+  width:100%; padding:9px 10px; border:1px solid #ddd; border-radius:10px;
+  font:inherit; font-size:.95rem; background:#fff; color:#222;
+}
+.adm-field textarea{ min-height:70px; resize:vertical; }
+.adm-img{ display:flex; gap:10px; align-items:flex-start; }
+.adm-prev{
+  width:72px; height:72px; flex:0 0 72px; border-radius:12px; overflow:hidden;
+  background:#f2f2f2; display:flex; align-items:center; justify-content:center; font-size:28px;
+}
+.adm-prev img{ width:100%; height:100%; object-fit:cover; display:block; }
+.adm-imgRight{ flex:1; display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+.adm-imgRight input{ width:100%; }
+.adm-card{ border:1px solid #ddd; border-radius:14px; padding:10px; margin:10px 0; background:#fafafa; }
+.adm-themes button{
+  width:40px; height:40px; border-radius:50%; border:2px solid #fff; outline:1px solid #ccc;
+  cursor:pointer; margin:4px;
+}

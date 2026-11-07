@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================
+  index.html — পেজের কাঠামো (সাধারণত বদলানোর দরকার নেই)
+  • লেখা, ছবি, নাম, শুভেচ্ছা → অ্যাডমিন প্যানেল (উপরে ডানে "A") অথবা js/config.js
+  • রঙ → css/themes.css   • লেআউট/অ্যানিমেশন → css/style.css
+  ==========================================================
+-->
+<html lang="en" data-theme="sunshine">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>It's Birthday Time 🎂</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="aurora"></div>
+  <div class="stars" id="stars"></div>
+
+  <!-- মিউজিক বাটন: সব পেজে থাকে -->
+  <button class="musicBtn" id="musicBtn" style="position:fixed;top:14px;left:14px;z-index:60">▶ Music</button>
+  <p class="musicStatus" id="musicStatus" style="position:fixed;top:60px;left:14px;z-index:60"></p>
+  <audio id="bgMusic" loop preload="none"></audio>
+
+  <!-- ধাপ ১: বেলুন (প্রথমে এটাই আসে) ও মোমবাতি -->
+  <div id="intro">
+    <div id="counter">Balloons popped: <b id="popCount">0</b> / <span id="needCount">21</span></div>
+    <div id="candleWrap" class="hidden">
+      <p>Make a wish ✨</p>
+      <div class="candle">
+        <div class="wick"></div>
+        <div class="flame" id="flame" title="Blow it"></div>
+      </div>
+      <div class="hint2">Tap the flame to blow it out</div>
+    </div>
+  </div>
+
+  <!-- ধাপ ২: উইশ পেজ (স্টিকার) -->
+  <section id="reel" class="hidden">
+    <div class="reelInner">
+      <h2 id="reelTitle"></h2>
+      <p class="sub" id="reelSub"></p>
+      <div class="stickers" id="stickers"></div>
+      <button class="btn reelBtn" id="openCard">Open my birthday card 🎁</button>
+    </div>
+  </section>
+
+  <div class="deco" id="decoLayer"></div>
+
+  <!-- ধাপ ৩: বার্থডে কার্ড -->
+  <section id="card" class="hidden">
+    <div class="wrap">
+      <div class="panel">
+        <p class="kicker" id="nameLine"></p>
+        <h1 class="title" id="headline"></h1>
+        <div class="polaroid"><div class="photo" id="photo"></div></div>
+        <div class="bottom" id="bottomText"></div>
+        <button class="btn" id="celebrate">Let's celebrate! 🎉</button>
+        <p class="cheer hidden" id="cheer"></p>
+        <button class="btn" id="toMemories" style="margin-top:16px">Next page ✨</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ধাপ ৪: স্বাগত ফটো পেজ -->
+  <section id="welcome" class="hidden">
+    <div class="welcomeInner">
+      <div class="photoRing"><div class="welcomePhoto" id="introPhoto"></div></div>
+      <p class="welcomeLine" id="welcomeLine"></p>
+      <h1 class="welcomeName" id="welcomeName"></h1>
+      <p class="welcomeNick" id="welcomeNick"></p>
+      <p class="welcomeText" id="welcomeText"></p>
+      <button class="btn" id="welcomeNext">Next ➜</button>
+    </div>
+  </section>
+
+  <!-- ধাপ ৫: মেমোরি পেজ -->
+  <section id="memories" class="hidden">
+    <div class="memInner">
+      <h2 class="memTitle" id="memTitle"></h2>
+      <p class="sub">Tap a photo to see it closer</p>
+      <div class="scene3d"><div class="carousel3d" id="carousel"></div></div>
+      <p class="finalLine glow" id="finalLine"></p>
+      <div class="row">
+        <button class="btn" id="wishesBtn">💌 Friends' Wishes</button>
+        <button class="btn" id="letterBtn">💌 Open my letter</button>
+        <button class="btn" id="replayBtn">↺ Replay</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Friends' Wishes: নিচ থেকে উঠে আসা শিট -->
+  <div id="wishSheet">
+    <div class="sheet">
+      <div class="sheetHead">
+        <h2 class="memTitle small">💌 Friends' Wishes</h2>
+        <button class="closeBtn" id="closeWishes">✕</button>
+      </div>
+      <p class="sub">Tap a name to open the letter</p>
+      <div class="flipGrid" id="flipGrid"></div>
+    </div>
+  </div>
+
+  <!-- একজন বন্ধুর চিঠি: পূর্ণ স্ক্রিন, ট্রান্সপারেন্ট -->
+  <div id="friendLetter">
+    <div class="flBox">
+      <button class="closeBtn flClose" id="flClose">✕</button>
+      <p class="flTo" id="flName"></p>
+      <p class="flMsg" id="flMsg"></p>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button id="lbClose">✕</button>
+    <div class="lbFrame">
+      <button class="lbNav" id="lbPrev">‹</button>
+      <img id="lbImg" alt="">
+      <button class="lbNav" id="lbNext">›</button>
+    </div>
+    <div id="lbCaption"></div>
+  </div>
+
+  <!-- চিঠি -->
+  <div id="letterModal"><div class="letter" id="letterText"></div></div>
+
+  <div class="madeBy">Made by Sadnan Ahmed</div>
+
+  <!-- অ্যাডমিন বাটন ও প্যানেল -->
+  <button id="adminBtn" title="Admin">A</button>
+  <aside id="adminPanel">
+    <div class="admTop">
+      <h3 id="admTitle">Admin</h3>
+      <button class="adm-btn ghost" id="admClose">✕</button>
+    </div>
+    <p class="adm-note" id="admStatus"></p>
+
+    <div id="admLock" class="hidden">
+      <p class="adm-note">অ্যাডমিন খুলতে পাসওয়ার্ড লেখো</p>
+      <input id="admPass" type="password" inputmode="numeric" placeholder="পাসওয়ার্ড">
+      <button class="adm-big" id="admUnlock">খুলো 🔓</button>
+      <p class="adm-note" id="admLockMsg"></p>
+    </div>
+
+    <div id="admHome">
+      <button class="adm-big" id="admGoCustomize">✏️ Customize</button>
+      <button class="adm-big ghost" id="admExport">⬇ config.js ডাউনলোড</button>
+      <p class="adm-note">Customize-এ যা বদলাবে তা এই ব্রাউজারে সেভ হবে। সবার জন্য পেজ বদলাতে config.js ডাউনলোড করে GitHub-এ আপলোড করো।</p>
+    </div>
+
+    <div id="admEditor" class="hidden">
+      <button class="adm-btn ghost" id="admBack">← ফিরে যাও</button>
+      <div class="admTabs" id="admTabs"></div>
+      <div id="admBody"></div>
+    </div>
+  </aside>
+
+  <!-- ক্রম: config → main → pages → admin -->
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/pages.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
