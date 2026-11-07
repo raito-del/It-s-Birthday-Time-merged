@@ -16,12 +16,10 @@ const CONFIG = {
   nickname: "লেদা বাচ্চা",
 
   // স্বাগত পেজের ওপরের ছোট লাইন (অক্ষর একটা একটা করে ভাসবে)
-  welcomeLine: "Happy Birthday to you",
+  welcomeLine: "Wishing you the happiest day",
 
-  // স্বাগত পেজের ছবি। খালি রাখলে 🎂 দেখাবে।
-  //   assets/intro.jpg      → নিজের ফোল্ডারের ছবি
-  //   https://.../intro.jpg → ইন্টারনেটের লিংক
-  introPhoto: "",
+  // স্বাগত পেজের ছবি (assets/intro.jpg)। খালি রাখলে 🎂 দেখাবে।
+  introPhoto: "assets/intro.jpg",
 
   // স্বাগত পেজের নামের নিচের লেখা
   introText: "Someone very special is turning a year older today. I made this little world just for you. Tap Next to begin ✨",
@@ -39,7 +37,6 @@ const CONFIG = {
   reelSub: "Every balloon you popped carried its own word",
 
   // বেলুনের কিওয়ার্ড ও লাইন। প্রতিটা আইটেম একটা বেলুনের জন্য।
-  // নতুন আইটেম: { word: "শব্দ", line: "লাইন" },
   balloonItems: [
     { word: "Courage",    line: "Be brave enough to start, even when it isn't perfect." },
     { word: "Joy",        line: "Find one reason to smile today." },
@@ -71,11 +68,11 @@ const CONFIG = {
   // কার্ডের বড় শিরোনাম
   headline: "Happy Birthday!",
 
-  // কার্ডের ছবি। খালি রাখলে 🎉 দেখাবে।
-  photo: "",
+  // কার্ডের ছবি (assets/photo.jpg)। খালি রাখলে 🎉 দেখাবে।
+  photo: "assets/photo.jpg",
 
   // ছবির নিচের লেখা (একটা একটা করে ভেসে উঠবে)
-  bottomText: "Another year of you being the best person I know. Thanks for every laugh and every late-night call. Hope today is as amazing as you are! 🎂",
+  bottomText: "Another year older. Same chaos. Happy birthday, লেদা বাচ্চা. Stay mad, stay you. 🎉",
 
   // "Let's celebrate" চাপলে যে লেখা আসবে
   cheer: "Happy Birthday, my friend! 🥳",
@@ -85,32 +82,58 @@ const CONFIG = {
   // মেমোরি পেজের শিরোনাম
   memoriesTitle: "Our memories 💖",
 
-  // মেমোরির ছবি ও ক্যাপশন। ছবি রাখো assets/memory1.jpg, memory2.jpg ... এ
+  // মেমোরির ছবি ও ক্যাপশন (assets/memory1.jpg ... memory9.jpg)
   memories: [
     { photo: "assets/memory1.jpg", caption: "Our squad day together 💕" },
-    { photo: "assets/memory2.jpg", caption: "Pink café vibes and happy faces ✨" }
+    { photo: "assets/memory2.jpg", caption: "Pink café vibes and happy faces ✨" },
+    { photo: "assets/memory3.jpg", caption: "Our fun day out together 🌿" },
+    { photo: "assets/memory4.jpg", caption: "Campus squad, thumbs up 👍" },
+    { photo: "assets/memory5.jpg", caption: "Group selfie with the crew 📸" },
+    { photo: "assets/memory6.jpg", caption: "Phone break under the trees 📱" },
+    { photo: "assets/memory7.jpg", caption: "Hanging out on the field 🏏" },
+    { photo: "assets/memory8.jpg", caption: "Walking together, always 💕" },
+    { photo: "assets/memory9.jpg", caption: "Pretty smile, pretty memory 🌼" }
   ],
 
   /* ---------- বন্ধুদের শুভেচ্ছা ----------
-     নতুন বন্ধু যোগ করতে: { name: "নাম", message: "শুভেচ্ছা" },
+     নতুন বন্ধু যোগ করতে: { name: "নাম", message: `লেখা` },
+     লেখা একাধিক লাইনে হলে ব্যাকটিক (`) দিয়ে ঘেরো।
      খালি রাখলে এই অংশ লুকিয়ে যাবে।
   ---------------------------------------------------- */
   friendWishes: [
-    { name: "Rahul", message: "Happy birthday bro! Stay awesome always." },
-    { name: "Sumaiya", message: "তুমি সবসময় এমন হাসিখুশি থেকো।" },
-    { name: "Karim", message: "Best wishes on your special day!" }
+    { name: "Mim", message: `Happy birthday, Mim! 🎂
+
+একটা বছর বাড়ল, কিন্তু তোর হাসিটা আগের মতোই আছে। Honestly, তোর সাথে সময় কাটানোটা সবসময় ভালো লাগে।
+
+Stay happy, stay positive, আর নিজের মতো থাকিস। Love you lots!
+তোর বন্ধু 💛` },
+
+    { name: "Wasika", message: `Happy birthday, Wasika! 🎉
+
+নতুন বছরে তোর সব স্বপ্ন পূরণ হোক। Keep shining, তুই যেখানেই থাকিস না কেন, তোর উপস্থিতিটা বোঝা যায়।
+
+Stay blessed, stay healthy, আর এভাবেই হাসতে থাকিস।
+তোর বন্ধুরা 🌸` },
+
+    { name: "Labbaik", message: `Happy birthday, Labbaik! 🥳
+
+তোর সাথে মজা করাটা সবসময়ই আলাদা। Hope this year brings you everything you've been working for.
+
+Stay awesome, stay humble, আর একটু বেশি চিল করিস। Cheers!
+তোর বন্ধু 🌟` }
   ],
 
-  // "Open my letter" বোতামের চিঠি
+  /* ---------- চিঠি ("Open my letter" বোতাম) ---------- */
   letter: `Dear Taiyaba,
 
-Happy birthday! Thank you for being someone I can always count on.
-Every year with you feels like a gift.
+Happy birthday! একটা বছর বড় হয়ে গেলি, কিন্তু আমাদের মধ্যের এই পাগলামিটা একই রকম আছে। 😄
 
-Wishing you everything your heart wants.
+Honestly, তোর মতো একজন বন্ধু পাওয়াটা অনেক বড় ব্যাপার। যেকোনো সমস্যায়, যেকোনো সময়ে শুধু একবার বলিস। আমরা তোর পাশে আছি, সবসময়।
 
-With love,
-Your friend`,
+Stay healthy, stay happy, আর নিজের মতো থাক। তোর প্রতিটা দিন যেন ভালো কাটে।
+
+Love,
+তোর বন্ধুরা 💛`,
 
   /* ---------- থিম ---------- */
 
