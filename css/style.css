@@ -353,8 +353,9 @@ body{
 .memTitle.small{ font-size:clamp(1.5rem,5vw,2rem); }
 .memInner .sub{ opacity:.8; margin:0 0 10px; }
 
-/* 3D ঘূর্ণায়মান ছবি */
-.scene3d{ height:320px; perspective:1000px; position:relative; }
+/* 3D ঘূর্ণায়মান ছবি
+   --rk: ব্যাসার্ধের গুণক। মোবাইলে বড় করা হয়েছে যাতে ছবির মাঝে ফাঁক থাকে */
+.scene3d{ height:320px; perspective:1000px; position:relative; --rk:1; }
 .carousel3d{
   position:absolute; left:50%; top:50%; width:0; height:0; transform-style:preserve-3d;
   animation:orbit 36s linear infinite;
@@ -364,7 +365,9 @@ body{
 .c3d{
   position:absolute; width:140px; height:180px; left:-70px; top:-90px; border-radius:16px;
   overflow:hidden; cursor:pointer; background:linear-gradient(135deg, var(--c1), var(--c3));
-  box-shadow:0 12px 26px rgba(0,0,0,.2); transform:rotateY(var(--a)) translateZ(var(--r));
+  border:3px solid rgba(255,255,255,.6);
+  box-shadow:0 12px 26px rgba(0,0,0,.2);
+  transform:rotateY(var(--a)) translateZ(calc(var(--r) * var(--rk)));
   backface-visibility:hidden; transition:filter .3s;
 }
 .c3d:hover{ filter:brightness(1.12); }
@@ -607,7 +610,7 @@ body{
 }
 
 /* ==========================================================
-   বেলুন ঠিক করার CSS (আগের অংশ, এখন ফাইলের শেষে যোগ করা)
+   বেলুন ঠিক করার CSS
    ========================================================== */
 .balloon{
   position:absolute; bottom:-170px; width:74px; cursor:pointer;
@@ -625,4 +628,12 @@ body{
 .balloon .b-body::after{
   content:""; position:absolute; left:50%; top:100%; width:1px; height:70px;
   background:linear-gradient(#fff, transparent); opacity:.8;
+}
+
+/* ==========================================================
+   মোবাইলে মেমোরি ক্যারোসেল ঠিক করা (সবার শেষে থাকবে)
+   ========================================================== */
+@media (max-width:600px){
+  .scene3d{ height:300px; --rk:1.4; }
+  .c3d{ width:96px; height:130px; left:-48px; top:-65px; border-width:2px; }
 }
